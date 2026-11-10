@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Nooks &amp; ClientSide FAQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: training-hub shell. Fixed charcoal module rail on the left, light reading pane on the right; rail collapses to a chip row on phones. */
+:root{
+  --charcoal:#181818; --charcoal-2:#222322; --rail-fg:#e9ebe6; --rail-muted:#9a9e95;
+  --green:#80b122; --green-700:#5d8217; --green-tint:#eef5e1;
+  --blue:#2d9cdb; --blue-700:#1f74a6; --blue-tint:#e5f3fb;
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#181818; --muted:#5b5f57; --border:#e3e5df;
+  --warn:#c98a12; --warn-tint:#fbf2df;
+  --font:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r-md:10px; --r-lg:16px;
+  --shadow:0 1px 2px rgba(24,24,24,.05),0 4px 14px rgba(24,24,24,.06);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121312; --surface:#1b1d1a; --fg:#eceee9; --muted:#a2a69c; --border:#2c2f2a;
+  --green-tint:#1f2a10; --blue-tint:#0f2533; --warn-tint:#2e2410; --charcoal-2:#1c1d1b;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121312; --surface:#1b1d1a; --fg:#eceee9; --muted:#a2a69c; --border:#2c2f2a;
+  --green-tint:#1f2a10; --blue-tint:#0f2533; --warn-tint:#2e2410; --charcoal-2:#1c1d1b;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6}
+a{color:var(--blue-700)} :root[data-theme="dark"] a{color:var(--blue)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) a{color:var(--blue)}}
+.shell{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:100vh}
+/* rail */
+.rail{background:radial-gradient(120% 70% at 0% 0%,#24301a 0%,var(--charcoal) 45%,#0f0f0f 100%);color:var(--rail-fg);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:28px 18px 24px;display:flex;flex-direction:column;gap:22px}
+.brand img{width:132px;display:block}
+.brand .over{margin-top:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:600}
+.brand h1{margin:4px 0 0;font-size:19px;line-height:1.25;font-weight:700;letter-spacing:-.01em;color:#fff}
+.search{position:relative}
+.search input{width:100%;padding:10px 12px 10px 36px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:14px}
+.search input::placeholder{color:var(--rail-muted)}
+.search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,156,219,.35)}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--rail-muted)}
+.navlabel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--rail-muted);margin:0 0 6px 10px}
+nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+nav button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r-md);
+  cursor:pointer;color:var(--rail-fg);font-size:14px;font-weight:500;transition:background .2s,color .2s}
+nav button:hover{background:rgba(255,255,255,.06)}
+nav button:focus-visible{box-shadow:0 0 0 3px rgba(45,156,219,.5)}
+nav button[aria-current="true"]{background:rgba(128,177,34,.16);color:#fff;font-weight:600}
+nav button[aria-current="true"] .ic{color:var(--green)}
+.ic{width:18px;height:18px;flex:none;color:var(--rail-muted)}
+nav .count{margin-left:auto;font-size:12px;color:var(--rail-muted);font-variant-numeric:tabular-nums}
+.railfoot{margin-top:auto;font-size:12px;color:var(--rail-muted);line-height:1.5}
+.railfoot b{color:var(--rail-fg);font-weight:600}
+/* main */
+main{padding-block:40px 64px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px));min-width:0}
+.inner{max-width:820px}
+.mhead .over{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--green-700);font-weight:600}
+:root[data-theme="dark"] .mhead .over{color:var(--green)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mhead .over{color:var(--green)}}
+.mhead h2{margin:4px 0 10px;font-size:32px;line-height:1.15;font-weight:700;letter-spacing:-.02em;text-wrap:balance}
+.lead{margin:0;color:var(--muted);font-size:16px;max-width:65ch}
+.progress{display:flex;gap:6px;margin:22px 0 28px}
+.progress span{height:4px;flex:1;border-radius:4px;background:var(--border)}
+.progress span.on{background:var(--green)}
+.qa{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+details.card summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;font-weight:600;font-size:15.5px;line-height:1.45}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(45,156,219,.35);border-radius:var(--r-lg)}
+.chev{width:18px;height:18px;flex:none;margin-top:2px;color:var(--green-700);transition:transform .2s}
+details[open] .chev{transform:rotate(90deg)}
+.ans{padding:0 18px 18px 48px;color:var(--fg);max-width:70ch}
+.ans p{margin:0}
+.tag{display:inline-block;margin-left:auto;flex:none;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.tips{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.tip{display:flex;gap:12px;padding:14px 16px;border-radius:var(--r-md);background:var(--green-tint);font-size:14.5px}
+.tip svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--green-700)}
+.tip b{font-weight:700}
+.tablewrap{overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th{text-align:left;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg)}
+td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.owner{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.owner.nooks{background:var(--blue-tint);color:var(--blue-700)}
+.owner.revops{background:var(--green-tint);color:var(--green-700)}
+.owner.gtm{background:var(--warn-tint);color:var(--warn)}
+:root[data-theme="dark"] .owner.nooks{color:var(--blue)} :root[data-theme="dark"] .owner.revops{color:var(--green)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .owner.nooks{color:var(--blue)}:root:not([data-theme="light"]) .owner.revops{color:var(--green)}}
+.videobar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;padding:14px 16px;border-radius:var(--r-md);background:var(--blue-tint)}
+.videobar svg{width:20px;height:20px;color:var(--blue-700);flex:none}
+.videobar span{flex:1;min-width:200px;font-size:14.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:var(--charcoal);color:#fff !important;text-decoration:none;font-weight:600;font-size:13.5px;transition:background .2s}
+.btn:hover{background:#2c2c2c}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:32px;flex-wrap:wrap}
+.pager button{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:14px 18px;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--surface);min-width:0;flex:1;max-width:48%;transition:border-color .2s,transform .12s}
+.pager button:hover{border-color:var(--green)}
+.pager button:focus-visible{box-shadow:0 0 0 3px rgba(45,156,219,.35)}
+.pager small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.pager strong{font-weight:600}
+.pager .next{text-align:right;margin-left:auto}
+.results h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:24px 0 10px;font-weight:600}
+mark{background:rgba(128,177,34,.3);color:inherit;border-radius:3px;padding:0 1px}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+.toolbar{display:flex;gap:10px;justify-content:flex-end;margin-bottom:10px}
+.toolbar button{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:4px 2px}
+.toolbar button:hover{color:var(--fg)}
+.toolbar button:focus-visible{box-shadow:0 0 0 3px rgba(45,156,219,.35);border-radius:4px}
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;height:auto;overflow:visible;padding:20px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));gap:14px}
+  .brand img{width:104px}
+  .brand h1{font-size:17px}
+  .navlabel,.railfoot{display:none}
+  nav ul{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}
+  nav button{width:auto;white-space:nowrap;padding:8px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px;font-size:13px}
+  nav .count{display:none}
+  main{padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .mhead h2{font-size:26px}
+  .ans{padding-left:18px}
+  .pager button{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="Martal">
+      <div class="over">SDR Training</div>
+      <h1>Nooks &amp; ClientSide FAQ</h1>
+    </div>
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search all questions" aria-label="Search all questions" autocomplete="off">
+    </label>
+    <nav aria-label="Topics">
+      <div class="navlabel">Topics</div>
+      <ul id="nav"></ul>
+    </nav>
+    <div class="railfoot">Updated <b>Nov 10, 2026</b><br>Built from your questions in Slack and the Nov 9 ClientSide training. Keep asking. Every question makes this better for the next rep.</div>
+  </aside>
+  <main><div class="inner" id="view"></div></main>
+</div>
+
+<script>
+const MODULES = [{"id": "where-to-ask", "title": "Where to ask", "icon": "help", "lead": "New tools come with a learning curve, and that's ok. The fastest way through it is asking out loud, in the right place, so the answer helps everyone.", "table": {"head": ["If it's about", "Post it here"], "rows": [["Nooks: the dialer, dispositions, Nooks reporting, access", "<b>#nooks-martal-group</b>. Tag Matthew Lewis, or react with the :ticket: emoji to open a Nooks support ticket."], ["ClientSide, lists, missing clients, access, bugs", "<b>#tech-support</b> and tag <b>@RevOps</b>. That reaches the whole RevOps/GTM team at once. Drop in a screenshot and the ClientSide link so they can see exactly what you see."], ["Something you want tracked as a ticket", "ClientSide &gt; your avatar (top right) &gt; <b>Help and Support</b>. Pick the client, give a quick summary, set the priority."], ["New lists or ICP changes", "Comment on the list in ClientSide or loop in your AM. GTM builds it from there."]]}, "tips": ["Ask in the channel, not a DM. If you're stuck on something, someone else is too, and your question saves them the time.", "When something breaks in Nooks, give us the specifics: prospect name, number, list, the disposition you logged, and roughly when it came back. The more detail you share, the faster it gets fixed."], "qa": []}, {"id": "lists", "title": "Lists", "icon": "list", "lead": "Good lists are half the battle. Everything you need now lives in ClientSide, and the more feedback you give on them, the better they get every week.", "qa": [["Where do I find the lists I should be dialing?", "ClientSide. Your assigned lists for each client are all there. The old Google Drive folders are legacy now, and everything in them is in ClientSide too."], ["How do I get a list into Nooks?", "Open the list in ClientSide, hit <b>Download full list</b> on the right, then upload that CSV into Nooks. It's a manual step for now since Nooks can't take a direct push."], ["How do I redial a list without hitting the same people?", "Each list in ClientSide shows how many calls you've made and who hasn't been called yet. Download just the uncalled contacts and go. The goal is 3 dials per contact, so work the list all the way through."], ["Why are the new lists split up so much?", "On purpose. Each list is one persona, so one talk track fits everyone on it. Every list also has a one-pager with who you're calling, why they're on the list, their pains, discovery questions, and objections. Spend two minutes on it before you dial. It shows on the call."], ["The titles look off, or I think we need a different ICP.", "Say something. Comment on the list in ClientSide, or post the list link in #tech-support and tag @RevOps. You're the one talking to these people every day, so your read on the list matters. Fresh lists built from your feedback and client changes are targeted for every Monday."], ["I don't have a list for one of my clients.", "Post it in #tech-support right away. Getting you unblocked is the GTM team's top priority. Please don't fall back to dialing in Landbase."], ["My list is over 2,000 contacts and won't upload.", "Nooks caps uploads at 2,000 rows. Split the file and upload each half."], ["Can I rename a list so I can see the whole name in Nooks?", "Please don't. Tracking runs off the list name, so changing it breaks your numbers. The part that matters is the front: client name, your name, ICP segment. The dates and part numbers at the end are just system references."], ["Incoming calls don't show what account they're from.", "When you import the CSV, map the company name column to <b>Account</b>. Do it right the first time and Nooks should remember it for next time."], ["How do I find someone on a list, like a referral?", "In ClientSide, use the search inside the list, or hit <b>Cmd+K</b> anywhere and type their name. It takes you straight to their record."], ["When can I call a contact again?", "After 3 calls, contacts go on hold. Right now that's 3 months. Edd asked for a 30-day cooldown instead so we can run follow-up campaigns, and that's being reviewed."], ["Can other contacts at a company drop off once I book a meeting there?", "Not automatically yet. Lists are capped at 5 contacts per company to keep this in check, and a fix is in the works since some clients want one meeting per company and others don't. For now, skip them and check your client guide."]]}, {"id": "dnc", "title": "DNC & dispositions", "icon": "ban", "lead": "Nothing hurts trust faster than calling someone who asked us not to, or someone you already booked. Clean dispositions protect the prospect, the client, and you.", "qa": [["Why am I still dialing people I marked DNC, Meeting, or Wrong Number?", "Usually one of two things. They were dispositioned before Oct 30, before the automations were in place, or the list got reset on refresh. If one pops up, log the disposition again and they'll drop off. Still seeing it after that? Post the example in #nooks-martal-group so we can get it fixed for everyone."], ["What do I pick when I refresh a list?", "<b>Keep your place.</b> That only loads people you haven't called yet. <b>Reset</b> reloads everyone, which is right for a second or third pass, but you'll see dispositioned contacts again unless they're marked DNC."], ["Nooks marked my meeting as DNC. Is that a bug?", "Nope, that's on purpose so no one accidentally calls someone you already booked. You can still reach them for a confirmation call through the <b>one-off dialer</b>. DNC only keeps them out of the list."], ["Does Skip take someone off my list?", "No. Skip just moves you to the next person. They'll come back next session."], ["How do I hold someone until a specific follow-up date?", "Use <b>Snooze</b>. Open their actions, pick Snooze, choose \"prospect\" so it covers all their numbers, set the date, save. Use \"Forever\" for someone who never wants to hear from us again. Respect that."], ["When I mark DNC, which box do I check?", "<b>Mark prospect and number as DNC.</b> That covers every number we have for them."], ["What disposition do I use for a booked meeting?", "Meeting. DNC and Wrong Number are there too."]]}, {"id": "reporting", "title": "Reporting", "icon": "chart", "lead": "Your numbers tell your story. Know them before anyone asks, and use them to see what's working so you can do more of it.", "qa": [["Where do I see my numbers day to day?", "ClientSide's <b>Today</b> page. It shows your dials, meetings booked this week, the list to hit next, overdue tasks, and meetings that still need an outcome. Start your day there."], ["How do I check my dials per client in Nooks (250 a week minimum)?", "Reporting &gt; <b>User</b> tab &gt; filter for yourself &gt; scroll to <b>Call Library</b> &gt; filter by <b>Sequence</b> and pick that client's CSV. Set the week as your date range. The record count is your dial count."], ["What counts as a dial?", "Everything. Connects, voicemails, no answers."], ["How does parallel dialing count?", "3 lines at once counts as 1 dial. Whoever picks up first gets the call, and the other 2 get marked canceled so you can call them later. Parallel gets you through more of a list, but it burns numbers faster and connect rates drop. Single line usually gets better conversations. Try both and watch your connect rate."], ["My dial count looks low or isn't moving.", "Nooks reporting runs on a delay, and it varies. Give it a bit before you worry."], ["How do I pull call summaries after a session?", "Reporting &gt; Team Overview &gt; Call Library &gt; filter for yourself and the CSV under Sequence &gt; download. The summaries are in there."], ["How do I tell which list is working best?", "Reporting &gt; <b>Sequence</b>. Compare lists over the same date range and look at connect rate, conversations, and meetings next to dials. A bigger list will always have more activity, so look at the rates, not just the totals."], ["Where's the full transcript?", "In Nooks: Call Library &gt; click the call &gt; <b>Transcript</b>. In ClientSide it's right on the opportunity. For longer calls you're recapping for a client, use the transcript, not the AI summary. Details matter."], ["Why aren't some of my real conversations counting as Connects?", "Not Interested was mapped to No Answer in Nooks, so those calls don't count as Connects even when you talked. An admin can change that under Settings &gt; All Settings &gt; CSV &gt; Disposition Fields."], ["Where's the coaching and scorecard after calls?", "Not set up yet. Coming."]]}, {"id": "follow-up", "title": "Contacts & follow-up", "icon": "phone", "lead": "Meetings get booked in the follow-up. Here's how to keep track of every conversation while the tools catch up.", "qa": [["How do I change a number or add a work number?", "Not easily yet. Nooks treats a CSV as a fixed list, so there's no extra phone field to edit. A second phone column is being added to future lists. For now, drop the new number in your notes."], ["I added an email, it said \"updated,\" then disappeared.", "Known Nooks bug. Put it in your notes for now."], ["Can I set a reminder to call someone back at a certain time?", "Not in Nooks. Add a task with a due date on the opportunity in ClientSide, or set a calendar reminder. Whatever keeps you from missing it."], ["My callbacks keep stacking up and I can't clear them.", "We know. No fix yet, but it's on the list."], ["Can I email or message a prospect from Nooks? What about LinkedIn?", "Not from Nooks. We only use the dialer, so ignore the Nooks AI if it says otherwise. LinkedIn is moving from Landbase to HeyReach, so log out of Landbase LinkedIn. Email and LinkedIn replies will show up in ClientSide as tasks once that's live. Training on both is coming."], ["Will I still get replies to emails from the old setup?", "Yes. Those conversations keep going. If a thread disappeared on you, flag it in #tech-support."], ["Where do I find company revenue now?", "Check their LinkedIn company page or look up an estimate. Not an official process, just what's working for reps right now."]]}, {"id": "setup", "title": "Setup & access", "icon": "settings", "lead": "Get set up once, the right way, and you won't think about it again.", "qa": [["I don't have any phone numbers to call from.", "Click <b>+ Phone number</b> and pick an area code, or click Create and Nooks assigns one. You can have up to 10 in different area codes. <a href=\"https://www.loom.com/share/add7fa88d27e4df78b5a79df28c4f061\" target=\"_blank\" rel=\"noopener\">Here's a quick Loom</a>."], ["I can log in but don't see my lists.", "Check your filters first. A time zone or account filter will hide everything. Then use the list selector at the top left and the refresh button above the call list. Remember, you upload your own CSVs. <a href=\"https://us-11432.app.gong.io/e/c-share/?tkn=10k027d6l640g1kki4bw8ol4bw\" target=\"_blank\" rel=\"noopener\">The Nooks onboarding recording</a> walks through it."], ["I call outside the US. How do I get access?", "You need an international seat. Message Angela and she'll get it turned on."], ["Do I need the Nooks browser plugin?", "Yes. If you're on Brave, turn off Brave Shields for the Nooks site."], ["Do I log out of the dialer at the end of the day?", "Still confirming. We'll update this when we know."], ["Can we text prospects?", "Not yet. SMS is included in our Nooks package, but our Privacy Policy and Terms of Use need updated language before Nooks can submit us for approval."], ["How do I set up Spotify in the dialer?", "Settings &gt; connect your Spotify account. It should pause when someone picks up, but one rep had it keep playing on a live call. Your call."]]}, {"id": "clientside", "title": "ClientSide", "icon": "layout", "lead": "ClientSide is home base now. Keep ClientSide and Nooks open side by side and everything you do shows up in one place, for you, your AM, and the client.", "video": "https://app.fireflies.ai/view/01M6SBNA6754K6PHSVRVA66S0Z", "qa": [["How do I log a booked meeting?", "Create an opportunity. Open the list, find the contact, click <b>Create opportunity</b>. Pick the type (signup meeting, MQL, SQL), add the meeting date and time, and paste in your call notes. Nooks will eventually do some of this for you, but for now create every one yourself. ClientSide checks for duplicates, so you won't double up."], ["When can the meeting go on the client's calendar?", "After it's approved. Your AM has <b>5 business hours</b> to approve it. If it's taking longer than that, message Angela. We want your meetings landing fast."], ["Meeting times only show in Eastern.", "For now, yes. Book the meeting on the calendar in the prospect's time zone like you normally would. A fix is being looked at."], ["How do I stay on top of follow-ups?", "Add a task with a due date and notes inside the opportunity. Your Tasks view shows what's due today, what's overdue, and what's coming up this week. If a lead isn't going anywhere, mark it lost or disqualified with a reason. That's useful data too."], ["Where's the call recording?", "Right on the opportunity. Click it to listen or read the transcript without leaving ClientSide."], ["Where's the client's booking link and background?", "On the client's Business Profile. Some are still being filled in."], ["What do I show on client calls now?", "ClientSide. Pull up the client's Pipeline and reporting, share your screen, or send the PDF report. Clients can't log in yet, but that's coming."], ["The Pipeline is missing MQLs, SQLs, or a teammate's meetings.", "It should show everything from every rep on the account. Old lead sheet data is still being pulled in. If something's missing, post it in #tech-support with the client name so we can close the gap."], ["A client is missing, or I see one I'm not on.", "Post it in #tech-support and tag @RevOps. Rep replacement cases have been fixed same day. Also check your Assignments tab in case there's one waiting for you to accept."], ["An account says \"Needs Reassignment\" but it's staffed.", "Usually the AM and rep counts didn't carry over. Post it in #tech-support and it'll get fixed."]]}, {"id": "open-issues", "title": "Known issues", "icon": "alert", "lead": "We know about these and they're being worked on. No need to report them again unless you've got a new example. That always helps.", "table": {"head": ["Issue", "Where it's at", "Owner"], "rows": [["Prospects dispositioned before Oct 30 still showing in Nooks lists", "Nooks is backfilling the old calls", "Nooks"], ["Not Interested calls not counting as Connects; some calls not logging", "Setting can be changed; Nooks is checking the missing calls", "Nooks support"], ["Old lead sheet data missing from ClientSide pipelines", "Audit running; flag gaps in #tech-support", "RevOps"], ["Pipeline not showing every rep's meetings on shared accounts", "Being checked", "RevOps"], ["Rep notification when a meeting is approved", "Being confirmed", "RevOps"], ["Meeting times locked to Eastern in ClientSide", "Looking at a fix", "RevOps"], ["30-day cooldown after 3 calls (currently a 3-month hold)", "Under review", "GTM"], ["Email and LinkedIn replies in ClientSide; move to HeyReach", "In progress, training coming", "GTM"], ["Email edits in the dialer not saving", "Confirmed Nooks bug", "Nooks"], ["No second phone field on lists", "Being added to future lists", "GTM"], ["Callbacks can't be cleared", "No answer yet", "GTM"], ["Other contacts at a company staying on the list after a meeting", "Ticket open; skip manually for now", "RevOps"], ["Prospect info screen loading blank on some calls", "Nooks tracing it", "Nooks support"], ["Parts of call recordings missing; Spotify not pausing on connect", "Reported", "Nooks"], ["VeriPark lists: confirming only the Refresh lists moved to Nooks", "Waiting on GTM", "GTM"], ["Report numbers looking off when filtered by sequence", "Sending Nooks new screenshots", "Nooks"]]}, "qa": []}];
+const ICONS = {
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.9.7c0 1.7-2.4 2.3-2.4 3.8"/><path d="M12 17h.01"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="m5.7 5.7 12.6 12.6"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
+  layout:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+  alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/>'
+};
+const svg = (n,c='ic') => `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+const TIP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+const nav = document.getElementById('nav'), view = document.getElementById('view'), q = document.getElementById('q');
+let current = MODULES[0].id;
+
+function itemCount(m){ return m.qa.length || (m.table ? m.table.rows.length : 0); }
+nav.innerHTML = MODULES.map(m => `<li><button data-id="${m.id}">${svg(m.icon)}<span>${m.title}</span><span class="count">${itemCount(m)}</span></button></li>`).join('');
+nav.addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.id); });
+
+function ownerPill(o){ const k = /nooks/i.test(o)?'nooks':/revops/i.test(o)?'revops':'gtm'; return `<span class="owner ${k}">${o}</span>`; }
+function tableHTML(t){
+  return `<div class="tablewrap"><table><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${
+    t.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${t.head[i]==='Owner'?ownerPill(c):c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function qaHTML(list, open){ return `<div class="qa">${list.map(([qq,a])=>`<details class="card"${open?' open':''}><summary>${CHEV}<span>${qq}</span></summary><div class="ans"><p>${a}</p></div></details>`).join('')}</div>`; }
+
+function render(id){
+  const i = MODULES.findIndex(m=>m.id===id), m = MODULES[i];
+  const prev = MODULES[i-1], next = MODULES[i+1];
+  view.innerHTML = `
+    <header class="mhead"><h2>${m.title}</h2><p class="lead">${m.lead}</p></header>
+    <div class="progress" aria-hidden="true">${MODULES.map((_,k)=>`<span class="${k<=i?'on':''}"></span>`).join('')}</div>
+    ${m.video?`<div class="videobar">${svg('layout','')}<span>Watch the Nov 9 ClientSide SDR training recording for the full walkthrough.</span><a class="btn" href="${m.video}" target="_blank" rel="noopener">Open recording</a></div>`:''}
+    ${m.qa.length?`<div class="toolbar"><button data-act="open">Expand all</button><button data-act="close">Collapse all</button></div>`+qaHTML(m.qa, i===0||m.qa.length<=7):''}
+    ${m.table?tableHTML(m.table):''}
+    ${m.tips?`<div class="tips">${m.tips.map(t=>`<div class="tip">${TIP}<div><b>Good to follow.</b> ${t}</div></div>`).join('')}</div>`:''}
+    <div class="pager">
+      ${prev?`<button data-id="${prev.id}"><small>Previous</small><strong>${prev.title}</strong></button>`:''}
+      ${next?`<button class="next" data-id="${next.id}"><small>Next</small><strong>${next.title}</strong></button>`:''}
+    </div>`;
+  nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current', b.dataset.id===id ? 'true':'false'));
+}
+view.addEventListener('click', e => {
+  const p = e.target.closest('.pager button'); if (p) { go(p.dataset.id); return; }
+  const t = e.target.closest('.toolbar button');
+  if (t) view.querySelectorAll('details').forEach(d => d.open = t.dataset.act === 'open');
+});
+
+function go(id){
+  q.value = '';
+  current = id;
+  if (location.hash !== '#'+id) history.replaceState(null,'','#'+id);
+  render(id);
+  window.scrollTo({top:0});
+  const b = nav.querySelector(`[data-id="${id}"]`); if (b && b.scrollIntoView && window.innerWidth<=860) b.scrollIntoView({block:'nearest',inline:'center'});
+}
+
+function strip(s){ const d=document.createElement('div'); d.innerHTML=s; return d.textContent; }
+function hi(html, term){
+  if(!term) return html;
+  const re = new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return html.split(/(<[^>]+>)/).map(p=>p.startsWith('<')?p:p.replace(re,'<mark>$1</mark>')).join('');
+}
+q.addEventListener('input', () => {
+  const term = q.value.trim();
+  if (!term) { render(current); return; }
+  const t = term.toLowerCase();
+  const groups = MODULES.map(m => ({m, hits: m.qa.filter(([a,b]) => (strip(a)+' '+strip(b)).toLowerCase().includes(t))})).filter(g=>g.hits.length);
+  nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current','false'));
+  view.innerHTML = `<header class="mhead"><div class="over">Search</div><h2>Results for “${term.replace(/</g,'&lt;')}”</h2></header>` +
+    (groups.length ? `<div class="results">${groups.map(g=>`<h3>${g.m.title}</h3>`+qaHTML(g.hits.map(([a,b])=>[hi(a,term),hi(b,term)]), true)).join('')}</div>`
+                   : `<div class="card empty">Nothing here yet. Try another word, or ask in #tech-support. If you\'re wondering, someone else is too.</div>`);
+});
+
+function fromHash(){ const h = location.hash.slice(1); return MODULES.some(m=>m.id===h) ? h : MODULES[0].id; }
+window.addEventListener('hashchange', () => { const id = fromHash(); if (id!==current) { current=id; render(id); } });
+current = fromHash(); render(current);
+</script>
+
+</body>
+</html>
